@@ -9,6 +9,7 @@ class Case {
   String? note = '';
   int? id = 0;
   String? price;
+  String? duration;
   Case({
     this.date,
     this.note,
@@ -17,6 +18,7 @@ class Case {
     this.cliID,
     this.startDate,
     this.title,
+    this.duration,
     this.id,
   });
 
@@ -27,6 +29,7 @@ class Case {
     startDate = json['startDate'] == null ? '' : getDate(json['startDate']);
     note = json['note'] ?? '';
     price = json['price'];
+    duration = json['duration'];
     patName = json['name'] ?? '';
     id = json['id'] ?? 0;
   }
@@ -35,6 +38,7 @@ class Case {
       'title': title,
       'date': date,
       'startDate': startDate,
+      'duration': duration,
       'id': id,
       'cliID': cliID,
       'name': patName,

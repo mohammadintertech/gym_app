@@ -24,6 +24,7 @@ class _CaseDialogState extends State<CaseDialog> {
   int eIndex = 0;
   TextEditingController noteController = TextEditingController();
   TextEditingController priceController = TextEditingController();
+  TextEditingController durationController = TextEditingController();
   String casesToBeAdded = '';
   int goodColorIndex = 0;
   final _formKey = GlobalKey<FormState>();
@@ -378,6 +379,42 @@ class _CaseDialogState extends State<CaseDialog> {
                                 ),
                               ),
                             ),
+                            SizedBox(
+                              width: 100,
+                            ),
+                            SizedBox(
+                              width: 200,
+                              child: Padding(
+                                padding: const EdgeInsets.only(top: 8.0),
+                                child: TextFormField(
+                                  controller: durationController,
+                                  onFieldSubmitted: (val) {
+                                    // FocusScope.of(context).requestFocus(focus);
+                                  },
+                                  validator: (val) {
+                                    try {
+                                      int s =
+                                          int.parse(trim(priceController.text));
+                                      return null;
+                                    } catch (e) {
+                                      return 'القيمة المدخلة غير صحيحة';
+                                    }
+                                  },
+                                  style: feildStyle,
+                                  cursorColor: Colors.blue,
+                                  decoration: InputDecoration(
+                                    labelStyle: feildStyle,
+                                    prefixIcon: Icon(
+                                      Icons.attach_money,
+                                      color: Colors.black,
+                                    ),
+                                    labelText: "المدة(أشهر)",
+
+                                    //fillColor: Colors.green),
+                                  ),
+                                ),
+                              ),
+                            ),
                           ],
                         ),
                         SizedBox(
@@ -450,6 +487,7 @@ class _CaseDialogState extends State<CaseDialog> {
           note: noteController.text,
           startDate: _startDate.toString(),
           price: priceController.text,
+          duration: durationController.text,
           title: selectedType);
       Provider.of<CaseProvider>(context, listen: false)
           .addCaseForPat(c: c, context: context);

@@ -98,6 +98,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         name varchar(45),
                         startDate varchar(45),
                         date varchar(45),
+                        duration varchar(45),
                         note varchar(45),
                         price varchar(45),
                         paid varchar(45)

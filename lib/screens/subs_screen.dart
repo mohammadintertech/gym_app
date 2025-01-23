@@ -12,6 +12,7 @@ import 'package:gym_app/providers/user_provider.dart';
 import 'package:gym_app/screens/edit_pat_screen.dart';
 import 'package:gym_app/widgets/add_employee_dialog.dart';
 import 'package:gym_app/widgets/case_details.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 class SubsScreen extends StatefulWidget {
@@ -149,7 +150,7 @@ class _SubsScreenState extends State<SubsScreen>
                               Expanded(
                                 child: Center(
                                   child: Text(
-                                    'تاريخ الاشتراك',
+                                    'الحالة',
                                     style: TextStyle(
                                         fontSize: 14,
                                         color: Colors.blue,
@@ -161,7 +162,7 @@ class _SubsScreenState extends State<SubsScreen>
                               Expanded(
                                 child: Center(
                                   child: Text(
-                                    'اسم المعالج',
+                                    'تاريخ انتهاء الاشتراك',
                                     style: TextStyle(
                                         fontSize: 14,
                                         color: Colors.blue,
@@ -173,7 +174,31 @@ class _SubsScreenState extends State<SubsScreen>
                               Expanded(
                                 child: Center(
                                   child: Text(
-                                    'العلاج المستخدم',
+                                    'تاريخ بدء الاشتراك',
+                                    style: TextStyle(
+                                        fontSize: 14,
+                                        color: Colors.blue,
+                                        fontFamily: 'Cairo',
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ),
+                              ),
+                              Expanded(
+                                child: Center(
+                                  child: Text(
+                                    'المدة(أشهر)',
+                                    style: TextStyle(
+                                        fontSize: 14,
+                                        color: Colors.blue,
+                                        fontFamily: 'Cairo',
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ),
+                              ),
+                              Expanded(
+                                child: Center(
+                                  child: Text(
+                                    'نوع الاشتراك',
                                     style: TextStyle(
                                         fontSize: 14,
                                         color: Colors.blue,
@@ -240,8 +265,69 @@ class _SubsScreenState extends State<SubsScreen>
                                             Expanded(
                                               child: Center(
                                                 child: Text(
+                                                  isSubscriptionExpired(
+                                                          provider.cases![index]
+                                                              .date
+                                                              .toString(),
+                                                          provider.cases![index]
+                                                              .duration!)
+                                                      ? 'غير فعال'
+                                                      : 'فعال',
+                                                  style: TextStyle(
+                                                      color: isSubscriptionExpired(
+                                                              provider
+                                                                  .cases![index]
+                                                                  .date
+                                                                  .toString(),
+                                                              provider
+                                                                  .cases![index]
+                                                                  .duration!)
+                                                          ? Colors.red
+                                                          : Colors.green,
+                                                      fontSize: 14,
+                                                      fontFamily: 'Cairo',
+                                                      fontWeight:
+                                                          FontWeight.bold),
+                                                ),
+                                              ),
+                                            ),
+                                            Expanded(
+                                              child: Center(
+                                                child: Text(
+                                                  addMonthsToDate(
+                                                      provider
+                                                          .cases![index].date
+                                                          .toString(),
+                                                      provider.cases![index]
+                                                          .duration!),
+                                                  style: TextStyle(
+                                                      color: Colors.black,
+                                                      fontSize: 14,
+                                                      fontFamily: 'Cairo',
+                                                      fontWeight:
+                                                          FontWeight.bold),
+                                                ),
+                                              ),
+                                            ),
+                                            Expanded(
+                                              child: Center(
+                                                child: Text(
                                                   provider.cases![index].date
                                                       .toString(),
+                                                  style: TextStyle(
+                                                      color: Colors.black,
+                                                      fontSize: 14,
+                                                      fontFamily: 'Cairo',
+                                                      fontWeight:
+                                                          FontWeight.bold),
+                                                ),
+                                              ),
+                                            ),
+                                            Expanded(
+                                              child: Center(
+                                                child: Text(
+                                                  provider
+                                                      .cases![index].duration!,
                                                   style: TextStyle(
                                                       color: Colors.black,
                                                       fontSize: 14,
@@ -267,7 +353,7 @@ class _SubsScreenState extends State<SubsScreen>
                                             Expanded(
                                               child: Center(
                                                 child: Text(
-                                                  '${provider.cases!.length - index}         ',
+                                                  '${provider.cases!.length - index}',
                                                   style: TextStyle(
                                                       fontWeight:
                                                           FontWeight.bold),
@@ -299,6 +385,33 @@ class _SubsScreenState extends State<SubsScreen>
         },
       ),
     );
+  }
+
+  bool isSubscriptionExpired(String startDateString, String durationInMonths) {
+    DateTime startDate =
+        DateFormat("yyyy-MM-dd").parse(startDateString); // Parse start date
+    int months = int.parse(durationInMonths); // Convert duration to int
+
+    DateTime endDate = DateTime(startDate.year, startDate.month + months,
+        startDate.day); // Calculate end date
+    DateTime currentDate = DateTime.now(); // Get current date
+
+    return currentDate.isAfter(endDate); // Check if expired
+  }
+
+  String addMonthsToDate(String dateString, String durationInMonths) {
+    try {
+      int months = int.parse(durationInMonths); // Convert duration to int
+      DateTime date =
+          DateFormat("yyyy-MM-dd").parse(dateString); // Parse input date
+
+      DateTime newDate =
+          DateTime(date.year, date.month + months, date.day); // Add months
+
+      return DateFormat("yyyy-MM-dd").format(newDate); // Return formatted date
+    } catch (e) {
+      return "Invalid input"; // Handle errors
+    }
   }
 
   @override
